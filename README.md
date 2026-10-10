@@ -37,3 +37,10 @@ Non-regular files (sockets, fifos, devices) are skipped silently. Only regular f
 Path separators in keys are always POSIX-style forward slashes, regardless of platform, so a manifest generated on Windows compares equal to one generated on Linux for the same tree.
 
 `exclude_names` matches basenames, not paths. `{".git"}` prunes any directory or file named exactly `.git` at any depth.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
